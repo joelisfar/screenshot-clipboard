@@ -9,14 +9,21 @@ set -e
 SCREENSHOT_DIR="${SCREENSHOT_DIR:-$HOME/Pictures/Screenshots}"
 
 echo "Installing screenshot-clipboard..."
-echo "Screenshot folder: $SCREENSHOT_DIR"
+echo ""
 
-# Check if Screenshots folder exists
+# Create Screenshots folder if it doesn't exist
 if [ ! -d "$SCREENSHOT_DIR" ]; then
     echo "Creating $SCREENSHOT_DIR..."
     mkdir -p "$SCREENSHOT_DIR"
+fi
+
+# Check current screenshot location
+CURRENT_LOCATION=$(defaults read com.apple.screencapture location 2>/dev/null || echo "$HOME/Desktop")
+
+if [ "$CURRENT_LOCATION" != "$SCREENSHOT_DIR" ]; then
+    echo "Configuring macOS to save screenshots to $SCREENSHOT_DIR..."
     defaults write com.apple.screencapture location "$SCREENSHOT_DIR"
-    echo "Set macOS screenshot location to $SCREENSHOT_DIR"
+    echo "  (was: $CURRENT_LOCATION)"
 fi
 
 # Create bin directory
@@ -87,6 +94,8 @@ launchctl unload ~/Library/LaunchAgents/com.user.screenshot-clipboard.plist 2>/d
 launchctl load ~/Library/LaunchAgents/com.user.screenshot-clipboard.plist
 
 echo ""
-echo "✓ Installed! Screenshots will auto-copy to clipboard."
+echo "✓ Installed!"
+echo "  Screenshots save to: $SCREENSHOT_DIR"
+echo "  Auto-copied to clipboard: Yes"
 echo ""
 echo "To uninstall: curl -fsSL https://raw.githubusercontent.com/YOUR_USERNAME/screenshot-clipboard/main/uninstall.sh | bash"
