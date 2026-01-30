@@ -7,19 +7,19 @@ When you take a screenshot, it saves to a folder. This tool watches that folder 
 ## Install
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/YOUR_USERNAME/screenshot-clipboard/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/joelisfar/screenshot-clipboard/main/install.sh | bash
 ```
 
 Or with a custom screenshot folder:
 
 ```bash
-SCREENSHOT_DIR=~/Desktop/Screenshots curl -fsSL https://raw.githubusercontent.com/YOUR_USERNAME/screenshot-clipboard/main/install.sh | bash
+SCREENSHOT_DIR=~/Desktop/Screenshots curl -fsSL https://raw.githubusercontent.com/joelisfar/screenshot-clipboard/main/install.sh | bash
 ```
 
 ## Uninstall
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/YOUR_USERNAME/screenshot-clipboard/main/uninstall.sh | bash
+curl -fsSL https://raw.githubusercontent.com/joelisfar/screenshot-clipboard/main/uninstall.sh | bash
 ```
 
 ## How it works

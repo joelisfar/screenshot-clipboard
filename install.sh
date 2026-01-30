@@ -1,8 +1,8 @@
 #!/bin/bash
 # Instant screenshot-to-clipboard for macOS
-# https://github.com/YOUR_USERNAME/screenshot-clipboard
+# https://github.com/joelisfar/screenshot-clipboard
 #
-# Install: curl -fsSL https://raw.githubusercontent.com/YOUR_USERNAME/screenshot-clipboard/main/install.sh | bash
+# Install: curl -fsSL https://raw.githubusercontent.com/joelisfar/screenshot-clipboard/main/install.sh | bash
 
 set -e
 
@@ -98,4 +98,4 @@ echo "✓ Installed!"
 echo "  Screenshots save to: $SCREENSHOT_DIR"
 echo "  Auto-copied to clipboard: Yes"
 echo ""
-echo "To uninstall: curl -fsSL https://raw.githubusercontent.com/YOUR_USERNAME/screenshot-clipboard/main/uninstall.sh | bash"
+echo "To uninstall: curl -fsSL https://raw.githubusercontent.com/joelisfar/screenshot-clipboard/main/uninstall.sh | bash"
