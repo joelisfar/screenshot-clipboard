@@ -6,25 +6,17 @@
 
 set -e
 
-SCREENSHOT_DIR="${SCREENSHOT_DIR:-$HOME/Pictures/Screenshots}"
+SCREENSHOT_DIR="$HOME/Pictures/Screenshots"
 
 echo "Installing screenshot-clipboard..."
 echo ""
 
-# Create Screenshots folder if it doesn't exist
-if [ ! -d "$SCREENSHOT_DIR" ]; then
-    echo "Creating $SCREENSHOT_DIR..."
-    mkdir -p "$SCREENSHOT_DIR"
-fi
+# Create Screenshots folder
+mkdir -p "$SCREENSHOT_DIR"
 
-# Check current screenshot location
-CURRENT_LOCATION=$(defaults read com.apple.screencapture location 2>/dev/null || echo "$HOME/Desktop")
-
-if [ "$CURRENT_LOCATION" != "$SCREENSHOT_DIR" ]; then
-    echo "Configuring macOS to save screenshots to $SCREENSHOT_DIR..."
-    defaults write com.apple.screencapture location "$SCREENSHOT_DIR"
-    echo "  (was: $CURRENT_LOCATION)"
-fi
+# Set macOS screenshot location
+echo "→ Screenshots will save to: $SCREENSHOT_DIR"
+defaults write com.apple.screencapture location "$SCREENSHOT_DIR"
 
 # Create bin directory
 mkdir -p ~/bin
@@ -32,7 +24,7 @@ mkdir -p ~/bin
 # Create the script
 cat > ~/bin/copy-newest-screenshot.sh << 'SCRIPT'
 #!/bin/bash
-SCREENSHOT_DIR="${SCREENSHOT_DIR:-$HOME/Pictures/Screenshots}"
+SCREENSHOT_DIR="$HOME/Pictures/Screenshots"
 LAST_FILE="/tmp/screenshot-copy-last"
 
 sleep 0.3
@@ -93,9 +85,6 @@ PLIST
 launchctl unload ~/Library/LaunchAgents/com.user.screenshot-clipboard.plist 2>/dev/null || true
 launchctl load ~/Library/LaunchAgents/com.user.screenshot-clipboard.plist
 
+echo "→ Screenshots will auto-copy to clipboard"
 echo ""
-echo "✓ Installed!"
-echo "  Screenshots save to: $SCREENSHOT_DIR"
-echo "  Auto-copied to clipboard: Yes"
-echo ""
-echo "To uninstall: curl -fsSL https://raw.githubusercontent.com/joelisfar/screenshot-clipboard/main/uninstall.sh | bash"
+echo "✓ Done! Take a screenshot and paste it anywhere."
