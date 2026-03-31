@@ -21,6 +21,22 @@ curl -fsSL https://raw.githubusercontent.com/joelisfar/screenshot-clipboard/main
 curl -fsSL https://raw.githubusercontent.com/joelisfar/screenshot-clipboard/main/uninstall.sh | bash
 ```
 
+## Settings
+
+Run `screenshot-clipboard` to open the interactive settings screen:
+
+```
+screenshot-clipboard            # Open settings
+screenshot-clipboard update     # Update to latest version
+screenshot-clipboard --help     # Show help
+```
+
+### Half-size mode
+
+Retina Macs capture screenshots at 2x resolution. When pasting into AI coding tools (like Claude Code), those extra pixels become base64 tokens that add up across conversation turns. A 1x screenshot is ~75% fewer tokens with negligible quality loss for UI validation.
+
+Toggle it on in the settings screen. When enabled, screenshots are downscaled 50% via `sips` before copying to clipboard. The original file in `~/Pictures/Screenshots` is never modified.
+
 ## How it works
 
 - Configures macOS to save screenshots to `~/Pictures/Screenshots`
