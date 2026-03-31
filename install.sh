@@ -199,6 +199,14 @@ PLIST
 launchctl unload ~/Library/LaunchAgents/com.user.screenshot-clipboard.plist 2>/dev/null || true
 launchctl load ~/Library/LaunchAgents/com.user.screenshot-clipboard.plist
 
+# Add ~/bin to PATH if not already there
+if [[ ":$PATH:" != *":$HOME/bin:"* ]]; then
+    SHELL_RC="$HOME/.zshrc"
+    [ -n "$BASH_VERSION" ] && SHELL_RC="$HOME/.bashrc"
+    echo 'export PATH="$HOME/bin:$PATH"' >> "$SHELL_RC"
+    echo "→ Added ~/bin to PATH in $(basename "$SHELL_RC") (restart your terminal or run: source $SHELL_RC)"
+fi
+
 echo "→ Screenshots will auto-copy to clipboard"
 echo ""
 echo "✓ Done! Take a screenshot and paste it anywhere."
