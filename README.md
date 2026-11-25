@@ -5,7 +5,8 @@ Instantly copy macOS screenshots to your clipboard.
 ## What it does
 
 1. **Sets your screenshot folder to `~/Pictures/Screenshots`**
-2. **Automatically copies every new screenshot to your clipboard**
+2. **Turns off the floating thumbnail** (it delays the file being saved by ~5 seconds)
+3. **Automatically copies every new screenshot to your clipboard**
 
 That's it. Take a screenshot, paste it anywhere — instantly.
 

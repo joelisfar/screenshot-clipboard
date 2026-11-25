@@ -17,6 +17,19 @@ mkdir -p "$SCREENSHOT_DIR"
 # Set macOS screenshot location
 echo "→ Screenshots will save to: $SCREENSHOT_DIR"
 defaults write com.apple.screencapture location "$SCREENSHOT_DIR"
+# Newer macOS (confirmed on 27) reads separate keys for screenshots and recordings
+defaults write com.apple.screencapture location-screenshot "$SCREENSHOT_DIR"
+defaults write com.apple.screencapture location-screenrecording "$SCREENSHOT_DIR"
+
+# Disable the floating thumbnail. While it's showing, macOS holds the file
+# back (~5s) before writing it to disk, which delays the clipboard copy.
+echo "→ Disabling floating screenshot thumbnail"
+defaults write com.apple.screencapture show-thumbnail -bool false
+
+# Restart the screenshot services so the new settings take effect now.
+# Newer macOS caches these settings in the Screenshot helpers too, not
+# just SystemUIServer. They relaunch on the next screenshot.
+killall SystemUIServer ScreenshotControls screencaptureui 2>/dev/null || true
 
 # Create bin directory
 mkdir -p ~/bin
