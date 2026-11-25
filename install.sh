@@ -14,17 +14,44 @@ echo ""
 # Create Screenshots folder
 mkdir -p "$SCREENSHOT_DIR"
 
+# Change a screenshot setting, remembering its original value so the
+# uninstaller can put it back. Only settings we actually change are
+# recorded, and a setting is only recorded once (so re-running the
+# installer to update never overwrites the true original).
+#   set_pref <key> <string|bool> <value>
+PREFS_DOMAIN="com.apple.screencapture"
+ORIGINALS="$HOME/.config/screenshot-clipboard/original-settings"
+set_pref() {
+    local key="$1" type="$2" value="$3" want="$3" current orig_type
+    [ "$type" = bool ] && { [ "$value" = true ] && want=1 || want=0; }
+
+    if current=$(defaults read "$PREFS_DOMAIN" "$key" 2>/dev/null); then
+        [ "$current" = "$want" ] && return 0    # already set; nothing to change
+        orig_type=$(defaults read-type "$PREFS_DOMAIN" "$key" | awk '{print $3}')
+    else
+        current="" orig_type="unset"
+    fi
+
+    mkdir -p "$(dirname "$ORIGINALS")"
+    # Fields: key, original type, original value, value we set. Separated by
+    # the ASCII unit separator (\037), since tabs would collapse empty fields.
+    if ! cut -d $'\037' -f1 "$ORIGINALS" 2>/dev/null | grep -qxF "$key"; then
+        printf '%s\037%s\037%s\037%s\n' "$key" "$orig_type" "$current" "$want" >> "$ORIGINALS"
+    fi
+    defaults write "$PREFS_DOMAIN" "$key" "-$type" "$value"
+}
+
 # Set macOS screenshot location
 echo "→ Screenshots will save to: $SCREENSHOT_DIR"
-defaults write com.apple.screencapture location "$SCREENSHOT_DIR"
+set_pref location string "$SCREENSHOT_DIR"
 # Newer macOS (confirmed on 27) reads separate keys for screenshots and recordings
-defaults write com.apple.screencapture location-screenshot "$SCREENSHOT_DIR"
-defaults write com.apple.screencapture location-screenrecording "$SCREENSHOT_DIR"
+set_pref location-screenshot string "$SCREENSHOT_DIR"
+set_pref location-screenrecording string "$SCREENSHOT_DIR"
 
 # Disable the floating thumbnail. While it's showing, macOS holds the file
 # back (~5s) before writing it to disk, which delays the clipboard copy.
 echo "→ Disabling floating screenshot thumbnail"
-defaults write com.apple.screencapture show-thumbnail -bool false
+set_pref show-thumbnail bool false
 
 # Restart the screenshot services so the new settings take effect now.
 # Newer macOS caches these settings in the Screenshot helpers too, not
